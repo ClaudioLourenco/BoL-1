@@ -2,7 +2,7 @@ if GetMyHero().charName ~= "Veigar" then
 return
 end
 
-local version = 1.0
+local version = 1.1
 local AUTOUPDATE = true
 local SCRIPT_NAME = "VeigarOS"
 
@@ -57,6 +57,7 @@ ts = TargetSelector(TARGET_LESS_CAST_PRIORITY, erange + eradius, DAMAGE_MAGIC)
 ts.name = "Veigar"
 
 enemyMinions = minionManager(MINION_ENEMY, qrange, myHero, MINION_SORT_HEALTH_ASC)
+jungleMinions = minionManager(MINION_JUNGLE, qrange, myHero, MINION_SORT_HEALTH_ASC)
 
 
 function OnLoad()
@@ -181,6 +182,17 @@ function OnDraw()
 					end
 				end
 			end
+			
+			jungleMinions:update()
+			if jungleMinions.objects[1] then
+				local targetMinion = jungleMinions.objects[1]
+
+				if ValidTarget(targetMinion, erange+eradius) then
+					if targetMinion.health < player:CalcMagicDamage(targetMinion, 45 * (player:GetSpellData(_Q).level - 1) + 80 + (.6 * player.ap)) then
+						DrawCircle(targetMinion.x,targetMinion.y,targetMinion.z, 150, qCircleColor)
+					end
+				end
+			end
 		end
     end
 end
@@ -199,6 +211,16 @@ function autoFarm()
 	if enemyMinions.objects[1] then
 	  local targetMinion = enemyMinions.objects[1]
 	  if ValidTarget(targetMinion, qrange) and string.find(targetMinion.name, "Minion_") then
+		if targetMinion.health < player:CalcMagicDamage(targetMinion, 45 * (player:GetSpellData(_Q).level - 1) + 80 + (.6 * player.ap)) then
+		  UseSpell(_Q, targetMinion)
+		end
+	  end
+	end
+	
+	jungleMinions:update()
+	if jungleMinions.objects[1] then
+	  targetMinion = jungleMinions.objects[1]
+	  if ValidTarget(targetMinion, qrange) then
 		if targetMinion.health < player:CalcMagicDamage(targetMinion, 45 * (player:GetSpellData(_Q).level - 1) + 80 + (.6 * player.ap)) then
 		  UseSpell(_Q, targetMinion)
 		end
