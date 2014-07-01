@@ -2,7 +2,7 @@ if GetMyHero().charName ~= "Veigar" then
 return
 end
 
-local version = 1.1
+local version = 1.2
 local AUTOUPDATE = true
 local SCRIPT_NAME = "VeigarOS"
 
@@ -33,14 +33,15 @@ if RequireI.downloadNeeded == true then return end
 -----SPELLS------
 -----------------
 qrange = 650
-wcastspeed = 1.25 -- (s) calculated from tick values
+
+wcastspeed = 1.25
 wrange = 900
 wradius = 230 --maximum radius of W
 AArange = 525
 
-eradius = 330 -- event horizon's radius has bounds from 300 to 400
+eradius = 375 -- event horizon's radius has bounds from 300 to 400
 erange = 600
-ecastspeed = 0.34 --(s) calculated from tick values before and after cast of even horizon
+ecastspeed = 0.25
 
 
 ----------------
@@ -271,8 +272,12 @@ end
 function performSmartCombo()
 	
 	targ = ts.target
-	combo = dmgCalc(targ)
-	aTime[targ.name] = GetTickCount()
+	combo = dmgCalc(targ, false)
+	if aLock[targ.name] == 0 or aTime[targ.name] == nil then
+		aLock[targ.name] = 1
+		aTime[targ.name] = GetTickCount()
+		PrintChat("Combo timer for:"..targ.name)
+	end
 	if combo == 1 then
 		performCombo1()
 	else
@@ -412,7 +417,6 @@ function calcsinglestun()
 
     predicted, hitchance1 = VP:GetPredictedPos(ts.target, ecastspeed)
 
-
     if predicted and (hitchance1 >=2) then
       local CircX, CircZ
       local dis = math.sqrt((player.x - predicted.x) ^ 2 + (player.z - predicted.z) ^ 2)
@@ -456,7 +460,7 @@ function drawKilable()
 		players = heroManager.iCount
 		for i = 1, players, 1 do
 			drawtarget = heroManager:getHero(i)
-			combo = dmgCalc(drawtarget)
+			combo = dmgCalc(drawtarget, true)
 			if combo == 2 then 
 				--PrintFloatText(drawtarget,0, "Finish him Combo2!!!")
 				DrawCircle(drawtarget.x, drawtarget.y, drawtarget.z, 100, drawKillColor2)
@@ -472,11 +476,13 @@ end
 
 aCombo = {}
 aTime = {}
+aLock = {}
 function dmgCalc(drawtarget)
 	if drawtarget ~= nil and drawtarget.team ~= player.team and drawtarget.visible and not drawtarget.dead then
 		if aTime[drawtarget.name]~= nil and GetTickCount() - aTime[drawtarget.name] < 2000 then
 			return aCombo[drawtarget.name]
 		end
+		aLock[drawtarget.name] = 0
 		local qDamage = getDmg("Q",drawtarget,myHero)
 		local wDamage = getDmg("W",drawtarget,myHero)
 		local rDamage = getDmg("R",drawtarget,myHero)
