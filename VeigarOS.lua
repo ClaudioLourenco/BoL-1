@@ -276,7 +276,6 @@ function performSmartCombo()
 	if aLock[targ.name] == 0 or aTime[targ.name] == nil then
 		aLock[targ.name] = 1
 		aTime[targ.name] = GetTickCount()
-		PrintChat("Combo timer for:"..targ.name)
 	end
 	if combo == 1 then
 		performCombo1()
