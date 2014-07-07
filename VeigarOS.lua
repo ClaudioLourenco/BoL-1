@@ -2,7 +2,7 @@ if GetMyHero().charName ~= "Veigar" then
 return
 end
 
-local version = 1.2
+local version = 1.3
 local AUTOUPDATE = true
 local SCRIPT_NAME = "VeigarOS"
 
@@ -21,6 +21,10 @@ else
 end
 
 if DOWNLOADING_SOURCELIB then PrintChat("Downloading required libraries, please wait...") return end
+
+if AUTOUPDATE then
+	SourceUpdater(SCRIPT_NAME, version, "raw.github.com", "/manzarek123/BoL/master/VeigarOS.lua", SCRIPT_PATH .. GetCurrentEnv().FILE_NAME, "/manzarek123/BoL/version/master/"..SCRIPT_NAME..".version"):CheckUpdate()
+end
 
 local RequireI = Require("SourceLib")
 RequireI:Add("vPrediction", "https://raw.github.com/Hellsing/BoL/master/common/VPrediction.lua")
@@ -62,7 +66,7 @@ jungleMinions = minionManager(MINION_JUNGLE, qrange, myHero, MINION_SORT_HEALTH_
 
 
 function OnLoad()
-   PrintChat("<font color=\"#eFF99CC\">You are using VeigarOS ["..version.."] by Manzarek.</font>")
+   PrintChat("<font color=\"#eFF99CC\">You are using VeigarOS ["..version.."] by Manzarek. Read the instructions</font>")
    _LoadLib()
    _LoadMenu()
 end
@@ -91,7 +95,7 @@ function _LoadMenu()
 	--SOWi:RegisterAfterAttackCallback(AfterAttack)
 
 	VeigarMenu:addSubMenu("Combo", "Combo")
-	VeigarMenu.Combo:addParam("SmartCombo", "SmartCombo", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("C"))
+	VeigarMenu.Combo:addParam("SmartCombo", "SmartCombo", SCRIPT_PARAM_ONKEYDOWN, false, 32)
 	VeigarMenu.Combo:addParam("Combo1", "Combo1 (E+W+DFG+Q+R)", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("G"))
 	VeigarMenu.Combo:addParam("Combo2", "Combo2 (E+W+Q)", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("H"))
     VeigarMenu.Combo:addParam("AutoSeraph", "Auto Seraph", SCRIPT_PARAM_ONOFF, true)
@@ -103,16 +107,16 @@ function _LoadMenu()
 	VeigarMenu.Harass:addParam("harassConserveManaMax", "Mana % to conserve", SCRIPT_PARAM_SLICE, 1, 1, 100, 0)
 	
 	VeigarMenu:addSubMenu("Farming","Farming")
-	VeigarMenu.Farming:addParam("autoFarmQ", "Auto Farm with Q", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("W"))
-	VeigarMenu.Farming:addParam("autoFarmQa", "Auto Farm with Q Alias", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("X"))
-	VeigarMenu.Farming:addParam("autoFarmQaa", "Auto Farm with Q Alias2", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("V"))
+	VeigarMenu.Farming:addParam("autoFarmQ", "Auto Farm with Q", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("X"))
+	VeigarMenu.Farming:addParam("autoFarmQa", "Auto Farm with Q Alias", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("V"))
+	VeigarMenu.Farming:addParam("autoFarmQaa", "Auto Farm with Q Alias2", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("C"))
 	VeigarMenu.Farming:addParam("farmConserveMana", "Conserve mana during farm", SCRIPT_PARAM_ONOFF,true)
 	VeigarMenu.Farming:addParam("farmConserveManaMax", "Mana % to conserve", SCRIPT_PARAM_SLICE, 1, 1, 100, 0)
 	
 	VeigarMenu:addParam("ewCombo", "Use E+W Combo", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("E"))
 	
 	
-	VeigarMenu:addParam("packetCast", "Cast spells using packets", SCRIPT_PARAM_ONOFF, true)
+	--VeigarMenu:addParam("packetCast", "Cast spells using packets", SCRIPT_PARAM_ONOFF, true)
 
 end
 
@@ -435,7 +439,7 @@ function GetDistanceTo(target1, target2)
 end
 
 function UseSpell(Spell,param1,param2)
-  if VeigarMenu.packetCast and VIP_USER then
+  if VeigarMenu.packetCast and VIP_USER and false then
     if param1 and param2 then
       Packet("S_CAST", {spellId = Spell, fromX = param1, fromY = param2, toX = param1, toY = param2}):send()
     elseif param1 then
