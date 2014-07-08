@@ -2,7 +2,7 @@ if GetMyHero().charName ~= "Veigar" then
 return
 end
 
-local version = 1.4
+local version = 1.3
 local AUTOUPDATE = true
 local SCRIPT_NAME = "VeigarOS"
 
