@@ -2,7 +2,7 @@ if GetMyHero().charName ~= "Veigar" then
 return
 end
 
-local version = 1.3
+local version = 1.4
 local AUTOUPDATE = true
 local SCRIPT_NAME = "VeigarOS"
 
@@ -23,7 +23,7 @@ end
 if DOWNLOADING_SOURCELIB then PrintChat("Downloading required libraries, please wait...") return end
 
 if AUTOUPDATE then
-	SourceUpdater(SCRIPT_NAME, version, "raw.github.com", "/manzarek123/BoL/master/VeigarOS.lua", SCRIPT_PATH .. GetCurrentEnv().FILE_NAME, "/manzarek123/BoL/version/master/"..SCRIPT_NAME..".version"):CheckUpdate()
+	SourceUpdater(SCRIPT_NAME, version, "raw.github.com", "/manzarek123/BoL/master/VeigarOS.lua", SCRIPT_PATH .. GetCurrentEnv().FILE_NAME, "/manzarek123/BoL/master/"..SCRIPT_NAME..".version"):CheckUpdate()
 end
 
 local RequireI = Require("SourceLib")
