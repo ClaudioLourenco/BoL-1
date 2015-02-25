@@ -4,7 +4,7 @@ end
 
 local version = 1.3
 local AUTOUPDATE = true
-local SCRIPT_NAME = "VeigarOS"
+local SCRIPT_NAME = "Big Veigar"
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ jungleMinions = minionManager(MINION_JUNGLE, qrange, myHero, MINION_SORT_HEALTH_
 
 
 function OnLoad()
-   PrintChat("<font color=\"#eFF99CC\">You are using VeigarOS ["..version.."] by Manzarek. Read the instructions</font>")
+   PrintChat("<font color=\"#eFF99CC\">You are using Big Veigar ["..version.."] by Claudio. Read the instructions</font>")
    _LoadLib()
    _LoadMenu()
 end
@@ -77,7 +77,7 @@ function _LoadLib()
 end
 
 function _LoadMenu()
-	VeigarMenu = scriptConfig("VeigarOS "..version, "VeigarOS "..version)
+	VeigarMenu = scriptConfig("Big Veigar "..version, "Big Veigar "..version)
 
     VeigarMenu:addTS(ts)
 
